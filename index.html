@@ -61,7 +61,8 @@
       line-height: 1.6;
     }
 
-    .input-area {
+    .input-area,
+    .final {
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
@@ -95,7 +96,8 @@
       text-transform: uppercase;
     }
 
-    #erro {
+    #erro,
+    #erro2 {
       min-height: 22px;
       margin: 14px 0 0;
       color: var(--error);
@@ -151,12 +153,156 @@
       white-space: pre-wrap;
     }
 
+    .unlock-box {
+      margin-top: 18px;
+      padding: 14px 12px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      text-align: center;
+    }
+
+    .unlock-box .mini-note {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
     .hidden {
       opacity: 0;
       transform: translateY(8px);
       pointer-events: none;
       height: 0;
       overflow: hidden;
+    }
+
+    .clock-wrap {
+      margin-top: 22px;
+      padding: 16px 12px 18px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .clock-hint {
+      margin: 0 0 14px;
+      color: #cfcfcf;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .clock {
+      width: min(72vw, 320px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.22);
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.05) 0 10%, transparent 11%),
+        radial-gradient(circle at center, rgba(255,255,255,0.02) 0 72%, rgba(255,255,255,0.01) 73%, transparent 100%);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
+      touch-action: none;
+      user-select: none;
+    }
+
+    .number {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 28px;
+      height: 28px;
+      margin-left: -14px;
+      margin-top: -14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: rgba(255,255,255,0.85);
+      pointer-events: none;
+      text-shadow: 0 0 6px rgba(255,255,255,0.08);
+    }
+
+    .hand {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: 50% 100%;
+      border-radius: 999px;
+      pointer-events: auto;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .hand:active {
+      cursor: grabbing;
+    }
+
+    .hour-hand {
+      width: 8px;
+      height: 78px;
+      margin-left: -4px;
+      margin-top: -78px;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 0 10px rgba(255,255,255,0.12);
+    }
+
+    .minute-hand {
+      width: 5px;
+      height: 112px;
+      margin-left: -2.5px;
+      margin-top: -112px;
+      background: rgba(255,255,255,0.78);
+    }
+
+    .center-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      margin-left: -8px;
+      margin-top: -8px;
+      border-radius: 50%;
+      background: #f1f1f1;
+      box-shadow: 0 0 16px rgba(255,255,255,0.18);
+      z-index: 3;
+    }
+
+    .clock-status {
+      margin: 14px 0 0;
+      min-height: 20px;
+      color: #cfcfcf;
+      font-size: 13px;
+    }
+
+    .image-box {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      animation: reveal 1.1s ease forwards;
+    }
+
+    .image-box img {
+      display: block;
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .image-phrase {
+      margin: 14px 0 0;
+      font-size: clamp(16px, 3.6vw, 20px);
+      line-height: 1.6;
+      color: #f0f0f0;
     }
 
     @keyframes flicker {
@@ -201,7 +347,7 @@
   <main class="container">
     <h1>Arquivo Bloqueado</h1>
 
-    <p class="subtitle">
+    <p class="subtitle" id="subtitle">
       Insira a palavra-chave.<br>
       Algumas portas só abrem para quem insiste.
     </p>
@@ -242,6 +388,55 @@ Isto não é delírio é o último aviso do inventor,
 Xingue o destino se quiser, mas não os deixe vencer,
 Esperando sua mensagem está aquele que viu o invisível.
       </div>
+
+      <div id="unlockBox" class="unlock-box">
+        <p class="mini-note">Outra chave abre a próxima parte.</p>
+        <input id="senha2" type="text" placeholder="nova senha..." autocomplete="off" autocapitalize="none" spellcheck="false" />
+        <button onclick="verificar2()">Acessar</button>
+        <p id="erro2"></p>
+      </div>
+
+      <section id="clockStage" class="hidden">
+        <div class="block">
+.. -. -.. . ... -.-. .-. .. - .. ...- . .. ... --..-- / .. -. ...- .. ... .. ...- . .. ... --..-- / ... . -- / .- / .-..-. .. -. ...- . -. -.-.. .- --- .-..-.
+        </div>
+
+        <div class="clock-wrap">
+          <p class="clock-hint">x + 50 * 2 = 250
+x + x + 45 = hora
+transforme o resultado em hora.
+Ex.: 100 = 01:00
+1330 = 13:30</p>
+
+          <div class="clock" id="clock">
+            <div class="center-dot"></div>
+
+            <div class="number">12</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+            <div class="number">3</div>
+            <div class="number">4</div>
+            <div class="number">5</div>
+            <div class="number">6</div>
+            <div class="number">7</div>
+            <div class="number">8</div>
+            <div class="number">9</div>
+            <div class="number">10</div>
+            <div class="number">11</div>
+
+            <div class="hand hour-hand" id="hourHand" title="Arraste o ponteiro das horas"></div>
+            <div class="hand minute-hand" id="minuteHand" title="Arraste o ponteiro dos minutos"></div>
+          </div>
+
+          <p class="clock-status" id="clockStatus">desloque os ponteiros até o ponto certo.</p>
+        </div>
+
+        <div class="image-box" id="imageBox">
+          <!-- TROQUE A URL ABAIXO PELA IMAGEM DESEJADA -->
+          <img id="unlockImage" src="blob:https://web.whatsapp.com/9b8a357d-634d-4af4-a78c-f1ce770f8bdc" alt="Imagem desbloqueada" />
+          <p class="image-phrase">Pergunte: O que é o Pó?</p>
+        </div>
+      </section>
     </section>
   </main>
 
@@ -261,19 +456,144 @@ Esperando sua mensagem está aquele que viu o invisível.
       const erro = document.getElementById("erro");
       const inputArea = document.getElementById("inputArea");
       const final = document.getElementById("final");
+      const subtitle = document.getElementById("subtitle");
 
       if (senha === correta) {
         erro.textContent = "";
         inputArea.classList.add("hidden");
+        subtitle.classList.add("hidden");
         final.style.display = "block";
       } else {
         erro.textContent = "acesso negado.";
       }
     }
 
+    function verificar2() {
+      const senha = normalizar(document.getElementById("senha2").value);
+      const correta = "verdades omitidas";
+
+      const erro2 = document.getElementById("erro2");
+      const unlockBox = document.getElementById("unlockBox");
+      const clockStage = document.getElementById("clockStage");
+
+      if (senha === correta) {
+        erro2.textContent = "";
+        unlockBox.classList.add("hidden");
+        clockStage.classList.remove("hidden");
+        layoutClock();
+      } else {
+        erro2.textContent = "acesso negado.";
+      }
+    }
+
     document.getElementById("senha").addEventListener("keydown", function (e) {
       if (e.key === "Enter") verificar();
     });
+
+    document.getElementById("senha2").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") verificar2();
+    });
+
+    const clock = document.getElementById("clock");
+    const hourHand = document.getElementById("hourHand");
+    const minuteHand = document.getElementById("minuteHand");
+    const clockStatus = document.getElementById("clockStatus");
+    const imageBox = document.getElementById("imageBox");
+    const numbers = Array.from(clock.querySelectorAll(".number"));
+
+    let activeHand = null;
+    let hourAngle = 200;
+    let minuteAngle = 40;
+    let unlocked = false;
+
+    function layoutClock() {
+      const rect = clock.getBoundingClientRect();
+      const radius = rect.width * 0.38;
+
+      numbers.forEach((el, index) => {
+        const value = index === 0 ? 12 : index;
+        const angleDeg = value * 30 - 90;
+        const angle = angleDeg * Math.PI / 180;
+        const x = rect.width / 2 + Math.cos(angle) * radius;
+        const y = rect.height / 2 + Math.sin(angle) * radius;
+
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+      });
+    }
+
+    function applyAngles() {
+      hourHand.style.transform = `rotate(${hourAngle}deg)`;
+      minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+      checkUnlock();
+    }
+
+    function angleFromPointer(evt) {
+      const rect = clock.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      const x = evt.clientX;
+      const y = evt.clientY;
+
+      let angle = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
+      if (angle < 0) angle += 360;
+      return angle;
+    }
+
+    function nearAngle(current, target, tolerance) {
+      const diff = Math.abs(((current - target + 540) % 360) - 180);
+      return diff <= tolerance;
+    }
+
+    function checkUnlock() {
+      const minuteOk = nearAngle(minuteAngle, 270, 10);
+      const hourOk = nearAngle(hourAngle, 112.5, 10);
+
+      if (minuteOk && hourOk && !unlocked) {
+        unlocked = true;
+        clockStatus.textContent = "acesso liberado.";
+        imageBox.style.display = "block";
+      } else if (!unlocked) {
+        clockStatus.textContent = "desloque os ponteiros até o ponto certo.";
+      }
+    }
+
+    function onPointerDown(evt, handName) {
+      activeHand = handName;
+      evt.currentTarget.setPointerCapture(evt.pointerId);
+      evt.preventDefault();
+    }
+
+    function onPointerMove(evt) {
+      if (!activeHand || unlocked) return;
+
+      const angle = angleFromPointer(evt);
+
+      if (activeHand === "hour") {
+        hourAngle = angle;
+      } else if (activeHand === "minute") {
+        minuteAngle = angle;
+      }
+
+      applyAngles();
+    }
+
+    function onPointerUp() {
+      activeHand = null;
+    }
+
+    hourHand.addEventListener("pointerdown", (e) => onPointerDown(e, "hour"));
+    minuteHand.addEventListener("pointerdown", (e) => onPointerDown(e, "minute"));
+    clock.addEventListener("pointermove", onPointerMove);
+    clock.addEventListener("pointerup", onPointerUp);
+    clock.addEventListener("pointercancel", onPointerUp);
+    clock.addEventListener("lostpointercapture", onPointerUp);
+
+    window.addEventListener("resize", layoutClock);
+
+    layoutClock();
+    applyAngles();
   </script>
 </body>
 </html>
