@@ -115,16 +115,8 @@
       font-size: clamp(17px, 4vw, 20px);
     }
 
-    .morse-title {
-      margin: 22px 0 10px;
-      color: #9a9a9a;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .morse {
-      margin-top: 8px;
+    .block {
+      margin-top: 14px;
       padding: 14px 12px;
       border: 1px dashed rgba(255,255,255,0.18);
       border-radius: 12px;
@@ -221,11 +213,19 @@
     </section>
 
     <section id="final" class="final" aria-live="polite">
-      <p class="phrase">até onde a curiosidade te leva?</p>
+      <p class="phrase">Até onde a curiosidade te leva?</p>
 
-      <div class="morse-title">código morse</div>
-      <div class="morse">
-.-..-. .- ... / -.-. --- .. ... .- ... / ...- .. ... - .- ... / ... .- --- / .. -. -.. . ... -.-. .-. .. - .. ...- . .. ... --..-- / .. -. ...- .. ... .. ...- . .. ... --..-- / ... . -- / .- / .-..-. .. -. ...- . -. -.-.. .- --- .-..-. / ... . .. / --.- ..- . / ..-. .- .-.. --- / .--. --- ..- -.-. --- / . / ..-. .- .-.. --- / -.-. --- .. ... .- ... / ...- .- --. .- ... --..-- / -- .- ... / ..-.. / .--. .- .-. .- / .- / --. .- .-. .- -. - .. .-. / .--. . ... ... --- .- ... / . .-. .-. .- -.. .- ... / -. .- --- / -.-. .... . --. ..- . -- / .- / .. ... ... --- .-.-.- / .-. . ... --- .-.. ...- .- / .. ... ... --- / . / --- / -.-. --- -. - .- - . .-.-.-
+      <div class="block">
+.- ... / -.-. --- .. ... .- ... / ...- .. ... - .- ... / ... .- ---
+      </div>
+
+      <div class="block">
+Iudjphqwdfdr, yrx hvfrqghu fdgd lqirupdfdr
+A = d B = e [...]
+      </div>
+
+      <div class="block">
+.-. . ... --- .-.. ...- .- / .. ... ... --- / . / .- -.-. .... . / . .-.. .
       </div>
 
       <div class="at-sign">@</div>
@@ -256,7 +256,7 @@ Esperando sua mensagem está aquele que viu o invisível.
 
     function verificar() {
       const senha = normalizar(document.getElementById("senha").value);
-      const correta = "paginas";
+      const correta = "insista";
 
       const erro = document.getElementById("erro");
       const inputArea = document.getElementById("inputArea");
